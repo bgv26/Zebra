@@ -1,103 +1,165 @@
 from itertools import permutations
 
 
-class Number: elems = "One Two Three Four Five".split()
+class Number:
+    One, Two, Three, Four, Five = range(5)
+    _values = 'One, Two, Three, Four, Five'.split(', ')
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return Number._values[self.value]
 
 
-class Color: elems = "Red Green Blue White Yellow".split()
+class Color:
+    Red, Green, Blue, Ivory, Yellow = range(5)
+    _values = 'Red, Green, Blue, Ivory, Yellow'.split(', ')
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return Color._values[self.value]
 
 
-class Drink: elems = "Milk Coffee Water Beer Tea".split()
+class Drink:
+    Milk, Coffee, Water, OrangeJuice, Tea = range(5)
+    _values = 'Milk, Coffee, Water, Orange Juice, Tea'.split(', ')
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return Drink._values[self.value]
 
 
-class Smoke: elems = "PallMall Dunhill Blend BlueMaster Prince".split()
+class Smoke:
+    Parliament, LuckyStrike, Kools, OldGold, Chesterfield = range(5)
+    _values = 'Parliament, Lucky Strike, Kools, Old Gold, Chesterfield'.split(', ')
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return Smoke._values[self.value]
 
 
-class Pet:   elems = "Dog Cat Zebra Horse Bird".split()
+class Pet:
+    Dog, Fox, Zebra, Horse, Snails = range(5)
+    _values = 'Dog, Fox, Zebra, Horse, Snails'.split(', ')
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return Pet._values[self.value]
 
 
-class Nation: elems = "British Swedish Danish Norvegian German".split()
+class Nation:
+    Englishman, Spaniard, Ukrainian, Norwegian, Japanese = range(5)
+    _values = 'Englishman, Spaniard, Ukrainian, Norwegian, Japanese'.split(', ')
 
+    def __init__(self, value):
+        self.value = value
 
-for c in (Number, Color, Drink, Smoke, Pet, Nation):
-    for i, e in enumerate(c.elems):
-        exec "%s.%s = %d" % (c.__name__, e, i)
+    def __str__(self):
+        return Nation._values[self.value]
 
 
 def is_possible(number, color, drink, smoke, pet):
-    if number and number[Nation.Norvegian] != Number.One:
+    # The Norwegian lives in the first house.
+    if number and number[Nation.Norwegian] != Number.One:
         return False
-    if color and color[Nation.British] != Color.Red:
+    # The Englishman lives in the red house.
+    if color and color[Nation.Englishman] != Color.Red:
         return False
-    if drink and drink[Nation.Danish] != Drink.Tea:
+    # The Ukrainian drinks tea.
+    if drink and drink[Nation.Ukrainian] != Drink.Tea:
         return False
-    if smoke and smoke[Nation.German] != Smoke.Prince:
+    # The Japanese smokes Parliaments.
+    if smoke and smoke[Nation.Japanese] != Smoke.Parliament:
         return False
-    if pet and pet[Nation.Swedish] != Pet.Dog:
+    # The Spaniard owns the dog.
+    if pet and pet[Nation.Spaniard] != Pet.Dog:
         return False
 
     if not number or not color or not drink or not smoke or not pet:
         return True
 
     for i in xrange(5):
+        # Coffee is drunk in the green house.
         if color[i] == Color.Green and drink[i] != Drink.Coffee:
             return False
-        if smoke[i] == Smoke.PallMall and pet[i] != Pet.Bird:
+        # The Old Gold smoker owns snails.
+        if smoke[i] == Smoke.OldGold and pet[i] != Pet.Snails:
             return False
-        if color[i] == Color.Yellow and smoke[i] != Smoke.Dunhill:
+        # Kools are smoked in the yellow house.
+        if color[i] == Color.Yellow and smoke[i] != Smoke.Kools:
             return False
+        # Milk is drunk in the middle house.
         if number[i] == Number.Three and drink[i] != Drink.Milk:
             return False
-        if smoke[i] == Smoke.BlueMaster and drink[i] != Drink.Beer:
+        # The Lucky Strike smoker drinks orange juice.
+        if smoke[i] == Smoke.LuckyStrike and drink[i] != Drink.OrangeJuice:
             return False
+        # The Norwegian lives next to the blue house.
         if color[i] == Color.Blue and number[i] != Number.Two:
             return False
 
         for j in xrange(5):
+            # The green house is immediately to the right of the ivory house.
             if (color[i] == Color.Green and
-                        color[j] == Color.White and
+                        color[j] == Color.Ivory and
                             number[j] - number[i] != 1):
                 return False
 
             diff = abs(number[i] - number[j])
-            if smoke[i] == Smoke.Blend and pet[j] == Pet.Cat and diff != 1:
+            # The man who smokes Chesterfields lives in the house next to the man with the fox.
+            if smoke[i] == Smoke.Chesterfield and pet[j] == Pet.Fox and diff != 1:
                 return False
-            if pet[i] == Pet.Horse and smoke[j] == Smoke.Dunhill and diff != 1:
-                return False
-            if smoke[i] == Smoke.Blend and drink[j] == Drink.Water and diff != 1:
+                # Kools are smoked in the house next to the house where the horse is kept.
+            if pet[i] == Pet.Horse and smoke[j] == Smoke.Kools and diff != 1:
                 return False
 
     return True
 
 
 def show_row(t, data):
-    print "%6s: %12s%12s%12s%12s%12s" % (
-        t.__name__, t.elems[data[0]],
-        t.elems[data[1]], t.elems[data[2]],
-        t.elems[data[3]], t.elems[data[4]])
+    print "%6s: %18s%18s%18s%18s%18s" % (
+        t.__name__, t(data[0]),
+        t(data[1]), t(data[2]),
+        t(data[3]), t(data[4]))
 
 
 def main():
     perms = list(permutations(range(5)))
 
+    count = 0
     for number in perms:
-        if is_possible(number, None, None, None, None):
-            for color in perms:
-                if is_possible(number, color, None, None, None):
-                    for drink in perms:
-                        if is_possible(number, color, drink, None, None):
-                            for smoke in perms:
-                                if is_possible(number, color, drink, smoke, None):
-                                    for pet in perms:
-                                        if is_possible(number, color, drink, smoke, pet):
-                                            print "Found a solution:"
-                                            show_row(Nation, range(5))
-                                            show_row(Number, number)
-                                            show_row(Color, color)
-                                            show_row(Drink, drink)
-                                            show_row(Smoke, smoke)
-                                            show_row(Pet, pet)
-                                            print
+        if number[Nation.Norwegian] == Number.One:
+            count += 1
+            print number
+    print count
 
+    # for number in perms:
+    #     if is_possible(number, None, None, None, None):
+    #         for color in perms:
+    #             if is_possible(number, color, None, None, None):
+    #                 for drink in perms:
+    #                     if is_possible(number, color, drink, None, None):
+    #                         for smoke in perms:
+    #                             if is_possible(number, color, drink, smoke, None):
+    #                                 for pet in perms:
+    #                                     if is_possible(number, color, drink, smoke, pet):
+    #                                         print "Found a solution:"
+    #                                         show_row(Nation, range(5))
+    #                                         show_row(Number, number)
+    #                                         show_row(Color, color)
+    #                                         show_row(Drink, drink)
+    #                                         show_row(Smoke, smoke)
+    #                                         show_row(Pet, pet)
+    #                                         print
+    #
 
 main()
