@@ -67,25 +67,75 @@ class Nation:
         return Nation._values[self.value]
 
 
-def is_possible(number, color, drink, smoke, pet):
-    # The Norwegian lives in the first house.
-    if number and number[Nation.Norwegian] != Number.One:
-        return False
-    # The Englishman lives in the red house.
-    if color and color[Nation.Englishman] != Color.Red:
-        return False
-    # The Ukrainian drinks tea.
-    if drink and drink[Nation.Ukrainian] != Drink.Tea:
-        return False
-    # The Japanese smokes Parliaments.
-    if smoke and smoke[Nation.Japanese] != Smoke.Parliament:
-        return False
-    # The Spaniard owns the dog.
-    if pet and pet[Nation.Spaniard] != Pet.Dog:
-        return False
+def cond_one(perms):
+    res = []
+    for number in perms:
+        # The Norwegian lives in the first house.
+        if number[Nation.Norwegian] == Number.One:
+            res.append(number)
 
-    if not number or not color or not drink or not smoke or not pet:
-        return True
+    return res
+
+
+def cond_two(perms):
+    res = []
+    for color in perms:
+        # The Englishman lives in the red house.
+        if color[Nation.Englishman] == Color.Red:
+            res.append(color)
+
+    return res
+
+
+def cond_three(perms):
+    res = []
+    for drink in perms:
+        # The Ukrainian drinks tea.
+        if drink[Nation.Ukrainian] == Drink.Tea:
+            res.append(drink)
+
+    return res
+
+
+def cond_four(perms):
+    res = []
+    for smoke in perms:
+        # The Japanese smokes Parliaments.
+        if smoke[Nation.Japanese] == Smoke.Parliament:
+            res.append(smoke)
+
+    return res
+
+
+def cond_five(perms):
+    res = []
+    for pet in perms:
+        # The Spaniard owns the dog.
+        if pet[Nation.Spaniard] == Pet.Dog:
+            res.append(pet)
+
+    return res
+
+
+def is_possible(number, color, drink, smoke, pet):
+    # # The Norwegian lives in the first house.
+    # if number and number[Nation.Norwegian] != Number.One:
+    #     return False
+    # # The Englishman lives in the red house.
+    # if color and color[Nation.Englishman] != Color.Red:
+    #     return False
+    # # The Ukrainian drinks tea.
+    # if drink and drink[Nation.Ukrainian] != Drink.Tea:
+    #     return False
+    # # The Japanese smokes Parliaments.
+    # if smoke and smoke[Nation.Japanese] != Smoke.Parliament:
+    #     return False
+    # # The Spaniard owns the dog.
+    # if pet and pet[Nation.Spaniard] != Pet.Dog:
+    #     return False
+
+    # if not number or not color or not drink or not smoke or not pet:
+    #     return True
 
     for i in xrange(5):
         # Coffee is drunk in the green house.
@@ -135,31 +185,37 @@ def show_row(t, data):
 def main():
     perms = list(permutations(range(5)))
 
-    count = 0
-    for number in perms:
-        if number[Nation.Norwegian] == Number.One:
-            count += 1
-            print number
-    print count
+    perms_one = cond_one(perms)
+    perms_two = cond_two(perms)
+    perms_three = cond_three(perms)
+    perms_four = cond_four(perms)
+    perms_five = cond_five(perms)
 
-    # for number in perms:
-    #     if is_possible(number, None, None, None, None):
-    #         for color in perms:
-    #             if is_possible(number, color, None, None, None):
-    #                 for drink in perms:
-    #                     if is_possible(number, color, drink, None, None):
-    #                         for smoke in perms:
-    #                             if is_possible(number, color, drink, smoke, None):
-    #                                 for pet in perms:
-    #                                     if is_possible(number, color, drink, smoke, pet):
-    #                                         print "Found a solution:"
-    #                                         show_row(Nation, range(5))
-    #                                         show_row(Number, number)
-    #                                         show_row(Color, color)
-    #                                         show_row(Drink, drink)
-    #                                         show_row(Smoke, smoke)
-    #                                         show_row(Pet, pet)
-    #                                         print
-    #
+    # print len(perms_one)
+
+    count = 0
+
+    for number in perms_one:
+        # if is_possible(number, None, None, None, None):
+            for color in perms_two:
+                # if is_possible(number, color, None, None, None):
+                    for drink in perms_three:
+                        # if is_possible(number, color, drink, None, None):
+                            for smoke in perms_four:
+                                # if is_possible(number, color, drink, smoke, None):
+                                    for pet in perms_five:
+                                        count += 1
+                                        if is_possible(number, color, drink, smoke, pet):
+                                            print "Found a solution:"
+                                            show_row(Nation, range(5))
+                                            show_row(Number, number)
+                                            show_row(Color, color)
+                                            show_row(Drink, drink)
+                                            show_row(Smoke, smoke)
+                                            show_row(Pet, pet)
+                                            print
+
+    print count #39813120
+                #7962624
 
 main()
