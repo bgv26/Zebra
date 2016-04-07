@@ -1,3 +1,4 @@
+import time
 from itertools import permutations
 
 
@@ -67,50 +68,50 @@ class Nation:
         return Nation._values[self.value]
 
 
-def cond_one(perms):
+def cond_house_number(perms):
+    """ The Norwegian lives in the first house. """
     res = []
     for number in perms:
-        # The Norwegian lives in the first house.
         if number[Nation.Norwegian] == Number.One:
             res.append(number)
 
     return res
 
 
-def cond_two(perms):
+def cond_house_color(perms):
+    """ The Englishman lives in the red house. """
     res = []
     for color in perms:
-        # The Englishman lives in the red house.
         if color[Nation.Englishman] == Color.Red:
             res.append(color)
 
     return res
 
 
-def cond_three(perms):
+def cond_drink(perms):
+    """ The Ukrainian drinks tea. """
     res = []
     for drink in perms:
-        # The Ukrainian drinks tea.
         if drink[Nation.Ukrainian] == Drink.Tea:
             res.append(drink)
 
     return res
 
 
-def cond_four(perms):
+def cond_smoke(perms):
+    """ The Japanese smokes Parliaments. """
     res = []
     for smoke in perms:
-        # The Japanese smokes Parliaments.
         if smoke[Nation.Japanese] == Smoke.Parliament:
             res.append(smoke)
 
     return res
 
 
-def cond_five(perms):
+def cond_pet(perms):
+    """ The Spaniard owns the dog. """
     res = []
     for pet in perms:
-        # The Spaniard owns the dog.
         if pet[Nation.Spaniard] == Pet.Dog:
             res.append(pet)
 
@@ -185,25 +186,25 @@ def show_row(t, data):
 def main():
     perms = list(permutations(range(5)))
 
-    perms_one = cond_one(perms)
-    perms_two = cond_two(perms)
-    perms_three = cond_three(perms)
-    perms_four = cond_four(perms)
-    perms_five = cond_five(perms)
+    perms_house_number = cond_house_number(perms)
+    perms_house_color = cond_house_color(perms)
+    perms_drink = cond_drink(perms)
+    perms_smoke = cond_smoke(perms)
+    perms_pet = cond_pet(perms)
 
-    # print len(perms_one)
+    # print len(perms_house_number)
 
     count = 0
 
-    for number in perms_one:
+    for number in perms_house_number:
         # if is_possible(number, None, None, None, None):
-            for color in perms_two:
+            for color in perms_house_color:
                 # if is_possible(number, color, None, None, None):
-                    for drink in perms_three:
+                    for drink in perms_drink:
                         # if is_possible(number, color, drink, None, None):
-                            for smoke in perms_four:
+                            for smoke in perms_smoke:
                                 # if is_possible(number, color, drink, smoke, None):
-                                    for pet in perms_five:
+                                    for pet in perms_pet:
                                         count += 1
                                         if is_possible(number, color, drink, smoke, pet):
                                             print "Found a solution:"
@@ -218,4 +219,6 @@ def main():
     print count #39813120
                 #7962624
 
+start_time = time.time()
 main()
+print("--- %s seconds ---" % (time.time() - start_time))
