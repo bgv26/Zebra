@@ -1,4 +1,3 @@
-import time
 from itertools import permutations
 
 
@@ -238,8 +237,15 @@ def get_solution():
                                 )
                             return sol_arr
 
-start_time = time.time()
-for sol in get_solution():
-    print sol
-print
-print("--- %s seconds ---" % (time.time() - start_time))
+
+def solution():
+    res = ''
+    for sol in get_solution():
+        if sol.get_drink() == 'Water':
+            res += "It is the " + sol.get_nation() + " who drinks the water.\n"
+        if sol.get_pet() == 'Zebra':
+            res += "The " + sol.get_nation() + " keeps the zebra."
+
+    return res
+
+print solution()
