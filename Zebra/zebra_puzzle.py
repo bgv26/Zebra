@@ -200,13 +200,6 @@ def is_possible(number, color, drink, smoke, pet):
     return True
 
 
-def show_row(t, data):
-    print "%6s: %18s%18s%18s%18s%18s" % (
-        t.__name__, t(data[0]),
-        t(data[1]), t(data[2]),
-        t(data[3]), t(data[4]))
-
-
 def get_solution():
     perms = list(permutations(range(5)))
 
