@@ -2,6 +2,31 @@ import time
 from itertools import permutations
 
 
+class Person:
+    def __init__(self, number, color, nation, drink, smoke, pet):
+        self.number = number
+        self.color = color
+        self.nation = nation
+        self.drink = drink
+        self.smoke = smoke
+        self.pet = pet
+
+    def __str__(self):
+        return "The house # %s color is %s. " \
+               "It's occupant is %s. He is drinking %s, smoking %s and have a %s." % \
+               (self.number, self.color, self.nation,
+                self.drink, self.smoke, self.pet
+                )
+
+    def get_nation(self):
+        return str(self.nation)
+
+    def get_drink(self):
+        return str(self.drink)
+
+    def get_pet(self):
+        return str(self.pet)
+
 class Number:
     One, Two, Three, Four, Five = range(5)
     _values = 'One, Two, Three, Four, Five'.split(', ')
@@ -183,7 +208,7 @@ def show_row(t, data):
         t(data[3]), t(data[4]))
 
 
-def main():
+def get_solution():
     perms = list(permutations(range(5)))
 
     perms_house_number = cond_house_number(perms)
@@ -192,33 +217,29 @@ def main():
     perms_smoke = cond_smoke(perms)
     perms_pet = cond_pet(perms)
 
-    # print len(perms_house_number)
-
-    count = 0
+    sol_arr = []
 
     for number in perms_house_number:
-        # if is_possible(number, None, None, None, None):
-            for color in perms_house_color:
-                # if is_possible(number, color, None, None, None):
-                    for drink in perms_drink:
-                        # if is_possible(number, color, drink, None, None):
-                            for smoke in perms_smoke:
-                                # if is_possible(number, color, drink, smoke, None):
-                                    for pet in perms_pet:
-                                        count += 1
-                                        if is_possible(number, color, drink, smoke, pet):
-                                            print "Found a solution:"
-                                            show_row(Nation, range(5))
-                                            show_row(Number, number)
-                                            show_row(Color, color)
-                                            show_row(Drink, drink)
-                                            show_row(Smoke, smoke)
-                                            show_row(Pet, pet)
-                                            print
-
-    print count #39813120
-                #7962624
+        for color in perms_house_color:
+            for drink in perms_drink:
+                for smoke in perms_smoke:
+                    for pet in perms_pet:
+                        if is_possible(number, color, drink, smoke, pet):
+                            for i in range(5):
+                                sol_arr.append(
+                                        Person(
+                                                Number(number[i]),
+                                                Color(color[i]),
+                                                Nation(i),
+                                                Drink(drink[i]),
+                                                Smoke(smoke[i]),
+                                                Pet(pet[i])
+                                        )
+                                )
+                            return sol_arr
 
 start_time = time.time()
-main()
+for sol in get_solution():
+    print sol
+print
 print("--- %s seconds ---" % (time.time() - start_time))
