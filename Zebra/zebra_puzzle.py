@@ -1,6 +1,24 @@
 from itertools import permutations
 
 
+class Persons:
+    def __init__(self):
+        self.persons = []
+
+    def add(self, person):
+        self.persons.append(person)
+
+    def getitem_by_drink(self, drink):
+        for person in self.persons:
+            if person.get_drink() == drink:
+                return person
+
+    def getitem_by_pet(self, pet):
+        for person in self.persons:
+            if person.get_pet() == pet:
+                return person
+
+
 class Person:
     def __init__(self, number, color, nation, drink, smoke, pet):
         self.number = number
@@ -16,6 +34,9 @@ class Person:
                (self.number, self.color, self.nation,
                 self.drink, self.smoke, self.pet
                 )
+
+    def __lt__(self, other):
+        return self.number < other.number
 
     def get_nation(self):
         return str(self.nation)
@@ -35,6 +56,9 @@ class Number:
 
     def __str__(self):
         return Number._values[self.value]
+
+    def __lt__(self, other):
+        return self.value < other.value
 
 
 class Color:
@@ -190,7 +214,7 @@ def get_solution():
     perms_smoke = cond_smoke(perms)
     perms_pet = cond_pet(perms)
 
-    sol_arr = []
+    sol_arr = Persons()
 
     for number in perms_house_number:
         for color in perms_house_color:
@@ -199,7 +223,7 @@ def get_solution():
                     for pet in perms_pet:
                         if is_possible(number, color, drink, smoke, pet):
                             for i in xrange(5):
-                                sol_arr.append(
+                                sol_arr.add(
                                         Person(
                                                 Number(number[i]),
                                                 Color(color[i]),
@@ -213,12 +237,9 @@ def get_solution():
 
 
 def solution():
-    res = ''
-    for sol in get_solution():
-        if sol.get_drink() == 'Water':
-            res += "It is the " + sol.get_nation() + " who drinks the water.\n"
-        if sol.get_pet() == 'Zebra':
-            res += "The " + sol.get_nation() + " keeps the zebra."
+    sol = get_solution()
+    res = "It is the " + sol.getitem_by_drink('Water').get_nation() + " who drinks the water.\n"
+    res += "The " + sol.getitem_by_pet('Zebra').get_nation() + " keeps the zebra."
 
     return res
 
