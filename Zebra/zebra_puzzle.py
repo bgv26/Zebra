@@ -143,25 +143,6 @@ def cond_pet(perms):
 
 
 def is_possible(number, color, drink, smoke, pet):
-    # # The Norwegian lives in the first house.
-    # if number and number[Nation.Norwegian] != Number.One:
-    #     return False
-    # # The Englishman lives in the red house.
-    # if color and color[Nation.Englishman] != Color.Red:
-    #     return False
-    # # The Ukrainian drinks tea.
-    # if drink and drink[Nation.Ukrainian] != Drink.Tea:
-    #     return False
-    # # The Japanese smokes Parliaments.
-    # if smoke and smoke[Nation.Japanese] != Smoke.Parliament:
-    #     return False
-    # # The Spaniard owns the dog.
-    # if pet and pet[Nation.Spaniard] != Pet.Dog:
-    #     return False
-
-    # if not number or not color or not drink or not smoke or not pet:
-    #     return True
-
     for i in xrange(5):
         # Coffee is drunk in the green house.
         if color[i] == Color.Green and drink[i] != Drink.Coffee:
@@ -201,7 +182,7 @@ def is_possible(number, color, drink, smoke, pet):
 
 
 def get_solution():
-    perms = list(permutations(range(5)))
+    perms = list(permutations(xrange(5)))
 
     perms_house_number = cond_house_number(perms)
     perms_house_color = cond_house_color(perms)
@@ -217,7 +198,7 @@ def get_solution():
                 for smoke in perms_smoke:
                     for pet in perms_pet:
                         if is_possible(number, color, drink, smoke, pet):
-                            for i in range(5):
+                            for i in xrange(5):
                                 sol_arr.append(
                                         Person(
                                                 Number(number[i]),
